@@ -1,0 +1,26 @@
+﻿syntax="proto3";
+option csharp_namespace = "GrpcStvari";
+
+service GrpcAuth {
+	rpc Registruj (RegistracijaMsg) returns (OdgovorMsg);
+	rpc Provera (PrazanMsg) returns (KorisnikInfoMsg);
+}
+
+message PrazanMsg {}
+
+message KorisnikInfoMsg {
+	bool Auth = 1;
+	string Ime = 2;
+	repeated string TipKlejma = 3;
+	repeated string VrednostKlejma = 4;
+}
+
+message RegistracijaMsg {
+	string Korisnicko = 1;
+	string Pass = 2;
+}
+
+message OdgovorMsg {
+	bool Uspeh = 1;
+	string Greske = 2;
+}

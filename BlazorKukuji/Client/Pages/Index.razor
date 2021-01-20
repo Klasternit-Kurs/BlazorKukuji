@@ -1,0 +1,11 @@
+﻿@page "/"
+@inject GrpcStvari.GrpcAuth.GrpcAuthClient _kli
+
+<button @onclick="Foo">Teest</button>
+
+@code {
+	public async void Foo()
+	{
+		_kli.ProveraAsync(new GrpcStvari.PrazanMsg());
+	}
+}

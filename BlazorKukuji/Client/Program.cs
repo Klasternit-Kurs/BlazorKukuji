@@ -2,6 +2,7 @@ using BlazorKukuji.Client.Servisi;
 using Grpc.Net.Client;
 using Grpc.Net.Client.Web;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -22,7 +23,10 @@ namespace BlazorKukuji.Client
 			builder.RootComponents.Add<App>("#app");
 
 			builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
+			builder.Services.AddAuthorizationCore();
 			builder.Services.AddScoped<IAuthServis, AuthServis>();
+			builder.Services.AddScoped<AuthStateProvider>();
+			builder.Services.AddScoped<AuthenticationStateProvider>(s => s.GetRequiredService<AuthStateProvider>());
 
 
 			builder.Services.AddSingleton(sr =>

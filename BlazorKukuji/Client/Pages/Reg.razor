@@ -1,0 +1,23 @@
+﻿@page "/reg"
+@inject AuthStateProvider _asp
+
+<p>@greska</p>
+<input @bind-value="uname" />
+<input @bind-value="pass" />
+<button @onclick="Regi">Registracija</button>
+
+@code
+{
+	private string uname, pass, greska = string.Empty;
+
+	private async void Regi()
+	{
+		greska = string.Empty;
+		var rez = await _asp.Registracija(new RegistracijaMsg { Korisnicko = uname, Pass = pass });
+		if (!rez.Uspeh)
+		{
+			greska = rez.Greske;
+			StateHasChanged();
+		}
+	}
+}

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Components.Authorization;
+﻿using GrpcStvari;
+using Microsoft.AspNetCore.Components.Authorization;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -34,5 +35,21 @@ namespace BlazorKukuji.Client.Servisi
 
 			return new AuthenticationState(new ClaimsPrincipal(identitet));
 		}
+
+		public async Task<OdgovorMsg> Login(RegistracijaMsg r)
+		{
+			var rez = await _authApi.Login(r);
+			NotifyAuthenticationStateChanged(GetAuthenticationStateAsync());
+			return rez;
+		}
+
+		public async Task Logout()
+		{
+			await _authApi.Logout();
+			NotifyAuthenticationStateChanged(GetAuthenticationStateAsync());
+		}
+
+		public async Task<OdgovorMsg> Registracija(RegistracijaMsg r)
+			=> await _authApi.Registracija(r);
 	}
 }

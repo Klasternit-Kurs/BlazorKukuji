@@ -19,21 +19,23 @@ namespace BlazorKukuji.Client.Servisi
 			_kanal = kanal;
 			_hc = hc;
 		}
-		public Task<OdgovorMsg> Login(RegistracijaMsg reg)
-		{
-			throw new NotImplementedException();
-		}
 
-		public Task Logout()
-		{
-			throw new NotImplementedException();
-		}
+		public async Task<OdgovorMsg> Login(RegistracijaMsg reg)
+			=> await (await _hc.PostAsJsonAsync("api/auth/login", reg))
+				.Content
+				.ReadFromJsonAsync<OdgovorMsg>();
+
+
+		public async Task Logout()
+			=> await _hc.GetAsync("api/auth/logout");
 
 		public async Task<TrenutniKorisnik> ProveriKorisnika()
 			=> await _hc.GetFromJsonAsync<TrenutniKorisnik>("api/auth/ProveriKorisnika");
 		
 
 		public async Task<OdgovorMsg> Registracija(RegistracijaMsg reg)
-			=> await _kanal.RegistrujAsync(reg);
+			=> await (await _hc.PostAsJsonAsync("api/auth/registracija", reg))
+				.Content
+				.ReadFromJsonAsync<OdgovorMsg>();
 	}
 }

@@ -1,11 +1,35 @@
 ﻿@page "/"
-@inject GrpcStvari.GrpcAuth.GrpcAuthClient _kli
+@inject AuthStateProvider _asp
+@inject NavigationManager _nm
 
-<button @onclick="Foo">Teest</button>
+<p>@greska</p>
+<input @bind-value="uname" />
+<input @bind-value="pass"/>
+<button @onclick="Reg">Login</button>
+<AuthorizeView Roles="Admin">
+	<Authorized>
+		<b>Kojesta za admina :) </b>
+	</Authorized>
+	<NotAuthorized>
+		<b>Nisssta</b>
+	</NotAuthorized>
+</AuthorizeView>
 
-@code {
-	public async void Foo()
+
+@code 
+{
+	private string uname, pass, greska = string.Empty;
+
+	private async void Reg()
 	{
-		_kli.ProveraAsync(new GrpcStvari.PrazanMsg());
+		greska = string.Empty;
+		var rez = await _asp.Login(new RegistracijaMsg { Korisnicko = uname, Pass = pass });
+		if (!rez.Uspeh)
+		{
+			greska = rez.Greske;
+			StateHasChanged();
+		}
+		else
+			_nm.NavigateTo("/", true);
 	}
 }
